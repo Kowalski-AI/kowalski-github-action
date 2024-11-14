@@ -20,6 +20,6 @@ jobs:
         id: kowalski
         uses: liquidibrium/kowalski-github-action@main
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_API_MODEL: 'gpt-4'
