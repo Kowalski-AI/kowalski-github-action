@@ -31426,8 +31426,10 @@ async function analyzeCode(parsedDiff, prDetails) {
         if (file.to === '/dev/null')
             continue; // Ignore deleted files
         for (const chunk of file.chunks) {
+            console.log(file.to, 'Analyzing chunk:', chunk);
             const prompt = createPrompt(file, chunk, prDetails);
             const aiResponse = await getAIResponse(prompt);
+            console.log('ai response', aiResponse);
             if (aiResponse) {
                 const newComments = createComment(file, aiResponse);
                 if (newComments) {
@@ -31521,6 +31523,7 @@ async function createReviewComment(owner, repo, pull_number, comments) {
     });
 }
 async function run() {
+    console.log('github action KOWALSKI has started!!!!!!!!!!!');
     const prDetails = await getPRDetails();
     let diff;
     const eventData = JSON.parse((0, fs_1.readFileSync)(process.env.GITHUB_EVENT_PATH ?? '', 'utf8'));
@@ -31560,6 +31563,7 @@ async function run() {
     //   );
     // });
     const comments = await analyzeCode(parsedDiff, prDetails);
+    console.log('comments to be posted', comments);
     if (comments.length > 0) {
         await createReviewComment(prDetails.owner, prDetails.repo, prDetails.pull_number, comments);
     }
