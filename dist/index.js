@@ -31491,6 +31491,7 @@ async function getAIResponse(prompt) {
             ]
         });
         const res = response.choices[0].message?.content?.trim() || '{}';
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return JSON.parse(res).reviews;
     }
     catch (error) {
@@ -31538,7 +31539,7 @@ async function run() {
             base: newBaseSha,
             head: newHeadSha
         });
-        diff = String(response.data);
+        diff = JSON.stringify(response.data);
     }
     else {
         console.log('Unsupported event:', process.env.GITHUB_EVENT_NAME);

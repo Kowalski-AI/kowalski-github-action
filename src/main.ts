@@ -59,8 +59,8 @@ async function getDiff(
 async function analyzeCode(
   parsedDiff: File[],
   prDetails: PRDetails
-): Promise<Array<Comment>> {
-  const comments: Array<Comment> = []
+): Promise<Comment[]> {
+  const comments: Comment[] = []
 
   for (const file of parsedDiff) {
     if (file.to === '/dev/null') continue // Ignore deleted files
@@ -115,9 +115,7 @@ type GptComment = {
   reviewComment: string
 }
 
-async function getAIResponse(
-  prompt: string
-): Promise<Array<GptComment> | null> {
+async function getAIResponse(prompt: string): Promise<GptComment[] | null> {
   const queryConfig = {
     model: OPENAI_API_MODEL,
     temperature: 0.2,
@@ -143,6 +141,7 @@ async function getAIResponse(
     })
 
     const res = response.choices[0].message?.content?.trim() || '{}'
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return JSON.parse(res).reviews
   } catch (error) {
     console.error('Error:', error)
@@ -150,10 +149,7 @@ async function getAIResponse(
   }
 }
 
-function createComment(
-  file: File,
-  aiResponses: Array<GptComment>
-): Array<Comment> {
+function createComment(file: File, aiResponses: GptComment[]): Comment[] {
   return aiResponses.flatMap(aiResponse => {
     if (!file.to) {
       return []
@@ -176,7 +172,7 @@ async function createReviewComment(
   owner: string,
   repo: string,
   pull_number: number,
-  comments: Array<Comment>
+  comments: Comment[]
 ): Promise<void> {
   await octokit.pulls.createReview({
     owner,
@@ -187,7 +183,7 @@ async function createReviewComment(
   })
 }
 
-export async function run() {
+export async function run(): Promise<void> {
   const prDetails = await getPRDetails()
   let diff: string | null
   const eventData = JSON.parse(
@@ -210,7 +206,7 @@ export async function run() {
       head: newHeadSha
     })
 
-    diff = String(response.data)
+    diff = JSON.stringify(response.data)
   } else {
     console.log('Unsupported event:', process.env.GITHUB_EVENT_NAME)
     return
