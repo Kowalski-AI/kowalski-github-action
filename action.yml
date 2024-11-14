@@ -15,6 +15,10 @@ inputs:
   OPENAI_API_KEY:
     description: 'OpenAI api key'
     required: true
+  OPENAI_API_MODEL:
+    description: 'OpenAI API model.'
+    required: false
+    default: 'gpt-4'
 
 # Define your outputs here.
 outputs:
