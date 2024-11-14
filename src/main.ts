@@ -68,6 +68,7 @@ async function analyzeCode(
       console.log(file.to, 'Analyzing chunk:', chunk)
       const prompt = createPrompt(file, chunk, prDetails)
       const aiResponse = await getAIResponse(prompt)
+      console.log('ai response', aiResponse)
       if (aiResponse) {
         const newComments = createComment(file, aiResponse)
         if (newComments) {
@@ -185,6 +186,7 @@ async function createReviewComment(
 }
 
 export async function run(): Promise<void> {
+  console.log('github action KOWALSKI has started!!!!!!!!!!!')
   const prDetails = await getPRDetails()
   let diff: string | null
   const eventData = JSON.parse(
@@ -232,6 +234,7 @@ export async function run(): Promise<void> {
   // });
 
   const comments = await analyzeCode(parsedDiff, prDetails)
+  console.log('comments to be posted', comments)
   if (comments.length > 0) {
     await createReviewComment(
       prDetails.owner,

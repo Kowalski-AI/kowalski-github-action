@@ -39,4 +39,3 @@ jobs:
       - name: Lint
         id: npm-lint
         run: npm run lint
-
