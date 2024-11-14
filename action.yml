@@ -9,10 +9,12 @@ branding:
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  GITHUB_TOKEN:
+    description: 'GitHub token to interact with the repository.'
     required: true
-    default: '1000'
+  OPENAI_API_KEY:
+    description: 'OpenAI api key'
+    required: true
 
 # Define your outputs here.
 outputs:
