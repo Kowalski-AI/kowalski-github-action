@@ -4,4 +4,7 @@
 import { run } from './main'
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
-run()
+run().catch((error: any) => {
+  console.error('Error:', error)
+  process.exit(1)
+})
